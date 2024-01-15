@@ -8,7 +8,7 @@ import { getChatIdForConfig } from '../helpers/getChatIdForConfig'
  * @param bot Bot to setup the command
  */
 export function setupLanguage(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('language', async (ctx) => {
+  bot.command('linguagemoff777', async (ctx) => {
     // Get chat id
     const chatId = await getChatIdForConfig(ctx, true)
     if (!chatId) {
