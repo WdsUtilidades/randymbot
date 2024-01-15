@@ -12,7 +12,7 @@ import { Chat, findChat } from '../models/chat'
 import { loc } from './locale'
 import { InstanceType } from 'typegoose'
 
-const promo = "Randy's bonus: you can get free crypto signals by joining the Hall-Of-Fame trader: <a href=\"https://t.me/+lokvZ8w0itEyNzQ0\">Join now</a>"
+const promo = "Bot editado por Peraltoso"
 
 /**
  * Starting a new raffle
@@ -303,7 +303,7 @@ function getButtons(raffle: InstanceType<Raffle>, language: string) {
  * @param ctx Context of message that finished raffle
  */
 export async function finishRaffle(raffle: Raffle, ctx: ContextMessageUpdate, defaultChat?: Chat) {
-  console.log(`Finishing raffle for chat ${raffle.chatId}`)
+  console.log(`Finalizando sorteio pelo chat ${raffle.chatId}`)
   // Get participants ids
   let ids = raffle.participantsIds
   const idsOriginalLength = ids.length
@@ -418,9 +418,9 @@ export async function finishRaffle(raffle: Raffle, ctx: ContextMessageUpdate, de
         )
         .replace('$numberOfParticipants', `${idsOriginalLength}`)
     } else {
-      text = `🎉 ${loc('winner', chat.language)} — <a href="tg://user?id=${
+      text = `🎉 ${loc('winner', chat.language)} \n\n<a href="tg://user?id=${
         winner.user.id
-      }">${name}</a>! ${loc('congratulations', chat.language)}!\n\n${loc(
+      }">${name}</a>! \n\n${loc('congratulations', chat.language)}!\n\n${loc(
         'participants_number',
         chat.language
       )} — ${idsOriginalLength}.`
