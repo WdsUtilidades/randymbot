@@ -3,7 +3,7 @@ import { Telegraf, ContextMessageUpdate, Extra } from 'telegraf'
 import { ExtraReplyMessage } from 'telegraf/typings/telegram-types'
 
 export function setupTestLocale(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('testLocales', async ctx => {
+  bot.command('testLocalesoff777', async ctx => {
     if (ctx.from.id !== 76104711) {
       return
     }
@@ -20,6 +20,6 @@ export function setupTestLocale(bot: Telegraf<ContextMessageUpdate>) {
         }
       }
     }
-    console.log('Done')
+    console.log('Feito')
   })
 }
