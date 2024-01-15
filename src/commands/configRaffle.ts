@@ -3,7 +3,7 @@ import { ContextMessageUpdate, Telegraf } from 'telegraf'
 import { loc } from '../helpers/locale'
 
 export function setupConfigRaffle(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('configRaffle', async (ctx) => {
+  bot.command('configRaffleoff777', async (ctx) => {
     // Check if private
     if (ctx.chat.type !== 'private') {
       return
