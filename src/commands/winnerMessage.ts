@@ -5,7 +5,7 @@ import { loc } from '../helpers/locale'
 import { getChatIdForConfig } from '../helpers/getChatIdForConfig'
 
 export function setupWinnerMessage(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('winnerMessage', async (ctx) => {
+  bot.command('winnerMessageoff777', async (ctx) => {
     // Get chat id
     const chatId = await getChatIdForConfig(ctx)
     if (!chatId) {
