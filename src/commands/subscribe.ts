@@ -4,7 +4,7 @@ import { loc } from '../helpers/locale'
 import { getChatIdForConfig } from '../helpers/getChatIdForConfig'
 
 export function setupSubscribe(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('subscribe', async (ctx) => {
+  bot.command('subscribeoff777', async (ctx) => {
     // Get chat id
     const chatId = await getChatIdForConfig(ctx)
     if (!chatId) {
