@@ -4,7 +4,7 @@ import { loc } from '../helpers/locale'
 import { getChatIdForConfig } from '../helpers/getChatIdForConfig'
 
 export function setupRaffleMessage(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('raffleMessage', async (ctx) => {
+  bot.command('raffleMessageoff777', async (ctx) => {
     // Get chat id
     const chatId = await getChatIdForConfig(ctx)
     if (!chatId) {
