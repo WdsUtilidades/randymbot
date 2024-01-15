@@ -3,7 +3,7 @@ import { ContextMessageUpdate, Telegraf } from 'telegraf'
 import { loc } from '../helpers/locale'
 
 export function setupAddChat(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('addChat', async (ctx) => {
+  bot.command('addChatoff777', async (ctx) => {
     // Check if private
     if (!ctx.message || ctx.message.chat.type !== 'private') {
       return
