@@ -5,13 +5,13 @@ const unflatten = require('flat').unflatten
 const fs = require('fs')
 
 ;(async function getTranslations() {
-  console.log('==== Getting localizations')
+  console.log('==== Obtendo localizações')
   const translations = (
     await axios.get('https://localizer.borodutch.com/localizations?tag=web')
   ).data.filter((l) => {
     return l.tags.indexOf('randymbot') > -1
   })
-  console.log('==== Got localizations:')
+  console.log('==== Obtive localizações:')
   console.log(JSON.stringify(translations, undefined, 2))
   // Get flattened map
   const flattenedMap = {} // { key: {en: '', ru: ''}}
@@ -23,10 +23,10 @@ const fs = require('fs')
       return p
     }, {})
   })
-  console.log('==== Decoded response:')
+  console.log('==== Resposta decodificada:')
   console.log(flattenedMap)
   const unflattened = unflatten(flattenedMap)
-  console.log('==== Reversed and unflattened map')
+  console.log('==== Mapa invertido e não nivelado')
   console.log(unflattened)
   fs.writeFileSync(
     `${__dirname}/../src/helpers/locale.ts`,
@@ -40,5 +40,5 @@ const fs = require('fs')
       2
     )}`
   )
-  console.log('==== Saved object to the file')
+  console.log('==== Objeto salvo no arquivo')
 })()
