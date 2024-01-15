@@ -1,42 +1,104 @@
-const dotenv = require('dotenv')
+// Get environment variables
+import * as dotenv from 'dotenv'
 dotenv.config({ path: `${__dirname}/../.env` })
-const axios = require('axios')
-const flatten = require('flat')
-const fs = require('fs')
-fs.copyFileSync(
-  `${__dirname}/../src/helpers/locale.ts`,
-  `${__dirname}/localization.js`
-)
-const localizationsFileContent = `module.exports = {${
-  fs
-    .readFileSync(`${__dirname}/localization.js`, 'utf8')
-    .split(
-      'export const localizations: { [index: string]: { [index: string]: string } } = {'
-    )[1]
-}`
-fs.writeFileSync(`${__dirname}/localization.js`, localizationsFileContent)
 
-const localizations = require(`${__dirname}/localization.js`)
+// Dependencies
+import { Telegraf, ContextMessageUpdate } from 'telegraf'
+import { setupStartAndHelp } from './commands/startAndHelp'
+import { setupRandy } from './commands/randy'
+import { finishRaffle, setupCallback, setupListener } from './helpers/raffle'
+import { setupLanguage, setupLanguageCallback } from './commands/language'
+import { setupNumberCallback, setupNumber } from './commands/number'
+import { setupTestLocale } from './commands/testLocales'
+import { setupSubscribe } from './commands/subscribe'
+import { setupNosubscribe } from './commands/nosubscribe'
+import { setupRaffleMessage } from './commands/raffleMessage'
+import { setupWinnerMessage } from './commands/winnerMessage'
+import { setupNodelete } from './commands/nodelete'
+import { setupListenForForwards } from './helpers/listenForForwards'
+import { setupConfigRaffle } from './commands/configRaffle'
+import { setupAddChat } from './commands/addChat'
+import { setupId } from './commands/id'
+import { setupDebug } from './commands/debug'
+import { RaffleModel } from './models'
+import { findChat } from './models/chat'
+const telegraf = require('telegraf')
 
-fs.unlinkSync(`${__dirname}/localization.js`)
-
-const flattenedLocalizations = {}
-Object.keys(localizations).forEach((language) => {
-  flattenedLocalizations[language] = flatten(localizations[language])
+// Setup the bot
+const bot: Telegraf<ContextMessageUpdate> = new telegraf(process.env.TOKEN, {
+  username: process.env.USERNAME,
+  channelMode: true,
 })
-;(async function postLocalizations() {
-  console.log('==== Corpo da postagem:')
-  console.log(JSON.stringify(flattenedLocalizations, undefined, 2))
-  try {
-    await axios.post(`https://localizer.borodutch.com/localizations`, {
-      // await axios.post(`http://localhost:1337/localizations`, {
-      localizations: flattenedLocalizations,
-      password: process.env.PASSWORD,
-      username: 'borodutch',
-      tags: ['randymbot'],
-    })
-    console.error(`==== Corpo postado!`)
-  } catch (err) {
-    console.error(`==== Erro ao postar: ${err.message}`)
+bot.startPolling()
+console.log('O bot está instalado e funcionando')
+
+// Setup callback
+setupCallback(bot)
+// Setup listeners
+setupListener(bot)
+setupListenForForwards(bot)
+
+// Setup commands
+setupStartAndHelp(bot)
+setupRandy(bot)
+setupLanguage(bot)
+setupNumber(bot)
+setupTestLocale(bot)
+setupSubscribe(bot)
+setupNosubscribe(bot)
+setupRaffleMessage(bot)
+setupWinnerMessage(bot)
+setupNodelete(bot)
+setupConfigRaffle(bot)
+setupAddChat(bot)
+setupId(bot)
+setupDebug(bot)
+bot.on('message', async (ctx) => {
+  if (!ctx.chat || !ctx.chat.type || ctx.chat.type !== 'private' || !ctx.message || !ctx.message.forward_from_chat) {
+    return
   }
-})()
+  if (ctx.from.id !== 76104711) {
+    const chatMember = await ctx.telegram.getChatMember(ctx.message.forward_from_chat.id, ctx.from.id)
+    if (chatMember.status !== 'creator' && chatMember.status !== 'administrator') {
+      return
+    }
+  }
+  const raffle = await RaffleModel.findOne({ chatId: ctx.message.forward_from_chat.id, messageId: ctx.message.forward_from_message_id })
+  if (!raffle) {
+    return
+  }
+  try {
+    let numberOfTries = 0
+    let succeeded = false
+    while (numberOfTries < 100 && !succeeded) {
+      try {
+        await finishRaffle(raffle, ctx, await findChat(ctx.message.forward_from_chat.id))
+        succeeded = true
+      } catch (e) {
+        console.log(e)
+        numberOfTries++
+        if (numberOfTries === 100) {
+          throw e
+        }
+      }
+    }
+    await ctx.reply('👍', {
+      reply_to_message_id: ctx.message.message_id,
+    })
+  } catch (err) {
+    console.error(err)
+    await ctx.reply('👎 try again', {
+      reply_to_message_id: ctx.message.message_id,
+    })
+  }
+})
+
+// Setup callbacks
+setupLanguageCallback(bot)
+setupNumberCallback(bot)
+
+bot.catch(console.error)
+
+process.on('unhandledRejection', (reason) => {
+  console.log('Unhandled Rejection at:', reason)
+})
