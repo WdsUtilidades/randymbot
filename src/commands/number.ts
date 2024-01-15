@@ -9,7 +9,7 @@ import { getChatIdForConfig } from '../helpers/getChatIdForConfig'
  * @param bot Bot to setup the command
  */
 export function setupNumber(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('number', async (ctx) => {
+  bot.command('ganhadores', async (ctx) => {
     // Get chat id
     const chatId = await getChatIdForConfig(ctx)
     if (!chatId) {
@@ -97,6 +97,18 @@ function getButtons() {
         { text: '10', callback_data: `n~10` },
         { text: '11', callback_data: `n~11` },
         { text: '12', callback_data: `n~12` },
+      ],
+      [
+        { text: '13', callback_data: `n~13` },
+        { text: '14', callback_data: `n~14` },
+        { text: '15', callback_data: `n~15` },
+        { text: '16', callback_data: `n~16` },
+      ],
+      [
+        { text: '17', callback_data: `n~17` },
+        { text: '18', callback_data: `n~18` },
+        { text: '19', callback_data: `n~19` },
+        { text: '20', callback_data: `n~20` },
       ],
     ],
   }
