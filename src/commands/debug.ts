@@ -1,7 +1,7 @@
 import { Telegraf, ContextMessageUpdate } from 'telegraf'
 
 export function setupDebug(bot: Telegraf<ContextMessageUpdate>) {
-  bot.command('debug', async (ctx) => {
+  bot.command('debugoff777', async (ctx) => {
     if (ctx.from && ctx.from.id !== parseInt(process.env.ADMIN, 10)) {
       return
     }
