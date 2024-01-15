@@ -25,7 +25,7 @@ Object.keys(localizations).forEach((language) => {
   flattenedLocalizations[language] = flatten(localizations[language])
 })
 ;(async function postLocalizations() {
-  console.log('==== Posting body:')
+  console.log('==== Corpo da postagem:')
   console.log(JSON.stringify(flattenedLocalizations, undefined, 2))
   try {
     await axios.post(`https://localizer.borodutch.com/localizations`, {
@@ -35,8 +35,8 @@ Object.keys(localizations).forEach((language) => {
       username: 'borodutch',
       tags: ['randymbot'],
     })
-    console.error(`==== Body posted!`)
+    console.error(`==== Corpo postado!`)
   } catch (err) {
-    console.error(`==== Error posting: ${err.message}`)
+    console.error(`==== Erro ao postar: ${err.message}`)
   }
 })()
